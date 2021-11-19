@@ -17,13 +17,13 @@ const scheduleTimes = {
   ]
 }
 
-const widget = new Widget()
+//const widget = new Widget()
 
-let date = new Date()
-let day = date.getDay()
-let hour = date.getHour()
-let min = date.getMinutes()
-
+let [day, hour, min] = getDateVars()
+//let day = date.getDay()
+//let hour = date.getHour()
+//let min = date.getMinutes()
+console.log(day)
 let init = false
 
 if (day > 0 && day < 6) {
@@ -32,7 +32,10 @@ if (day > 0 && day < 6) {
 }
 
 
-
+function getDateVars() {
+  let d = new Date()
+  return d.getDay(), d.getHour(), d.getMinutes()
+}
 function currentClass() {
   if (hour >= 7 && hour <= 11) {
     for (let i = 0; i < schedule.length; i++) {
@@ -44,7 +47,10 @@ function currentClass() {
   }
 }
 function findNextClass() {
-  
+  if (init == true) {
+    date = new Date()
+    
+  }
 }
 
 function convertTime(timeString) {
