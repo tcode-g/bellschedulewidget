@@ -32,33 +32,25 @@ function getDateVars() {
   return [d.getDay(), d.getHours(), d.getMinutes(), d.getTime()]
 }
 function getNextClass() {
-
   for (let i = 0; i < schoolHrs.length; i++) {
 
     [day, hrs, min, ms] = getDateVars()
 
     let classTimes = schoolHrs[i]
-    let start = classTimes[0]
-    let end = classTimes[1]
 
-    if (classTimes.length == 3 && classTimes[2] == "Break") {
-      console.log("break")
-      return i;
-    } else {
-      console.log("not break")
-    }
+    let msConv = (tbl) => {return ((parseInt(tbl[0]) * 60) + parseInt(tbl[1])) * 60 * 1000}
+    let startOfClass = msConv(classTimes[0].split(":"))
+    let endOfClass = msConv(classTimes[1].split(":"))
 
-    let startSplit = start.split(":")
-    let endSplit = end.split(":")
-    let F = (tbl) => {return ((parseInt(tbl[0]) * 60) + parseInt(tbl[1])) * 60 * 1000}
-    let startOfClass = F(startSplit)
-    let endOfClass = F(endSplit)
     if (ms < startOfClass && ms < endOfClass) {
       return i;
     }
+    
   }
+
+  // if there isn't a next class
+  return 0;
 }
 
-
-getNextClass()
-console.log(new Date().getTime())
+let nextClass = getNextClass()
+console.log(nextClass)
