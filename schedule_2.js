@@ -38,7 +38,6 @@ function getDateVars() {
 let msConv = (tbl) => {return startTime.getTime() + ((parseInt(tbl[0]) * 60) + parseInt(tbl[1])) * 60 * 1000}
 function getNextClass() {
   // 60 for seconds, 1000 for milliseconds
-
   for (let i = 0; i < schoolHrs.length; i++) {
     // [day, hrs, min, ms] = getDateVars()
 
@@ -50,9 +49,8 @@ function getNextClass() {
       return i;
     }
   }
-
   // if there isn't a next class
-  return 0;
+  return schoolHrs.length;
 }
 function timeLeft(index) {
   let classTimes = schoolHrs[index]
@@ -67,7 +65,7 @@ function timeLeft(index) {
     let hrsLeft = remainingDate.getHours()
     let minsLeft = remainingDate.getMinutes()
     if (hrsLeft > 0) {
-      taskText += hrsLeft.toString() + ((hrsLeft == 1) ? " hour" : " hours");
+      taskText += hrsLeft.toString() + ((hrsLeft == 1) ? " hour " : " hours ");
     }
     taskText += minsLeft.toString() + ((minsLeft == 1) ? " min" : " mins");
     taskText += " left"
