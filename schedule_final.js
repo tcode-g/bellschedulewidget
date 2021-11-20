@@ -36,6 +36,7 @@ const startTime = new Date()
 startTime.setHours(0,0,0,0)
 
 const scheduleHours = (Day == 3) ? scheduleTimes.Wednesday : scheduleTimes.Regular; // wednesday check
+const schoolDay = (Day > 0 && Day < 6)
 
 var displayText = {
     "title": "",
@@ -58,6 +59,12 @@ const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 // main
 function calculateClass() {
+    if (!schoolDay) {
+        displayText.title = "No School Today!"
+        displayText.body = ""
+        return
+    }
+
     let nextClass = scheduleHours.length-1;
     for(let s = 0; s < scheduleHours.length; s++) {
         let start = scheduleHours[s][0]
