@@ -20,7 +20,7 @@ const scheduleTimes = {
 /*
 Wants:
     finds time until next class--
-
+    add if day is weekday or not
 
 Display:
     current period --
@@ -58,7 +58,7 @@ const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
 // main
 function calculateClass() {
-    let nextClass = scheduleHours.length;
+    let nextClass = scheduleHours.length-1;
     for(let s = 0; s < scheduleHours.length; s++) {
         let start = scheduleHours[s][0]
         let startMS = stringToMs(start)
@@ -79,7 +79,7 @@ function calculateClass() {
         return
     }
 
-    let currentClass = nextClass - 1
+    let currentClass = (MS > nextStartMS) ? nextClass : nextClass - 1;
     if (currentClass < 0) { // before any classes started
         displayText.title = "Before School"
         displayText.body = getTimeUntil(nextStartMS, MS)
