@@ -99,10 +99,12 @@ function calculateClass() {
 }
 function createWidget() {
     const widget = new ListWidget()
-    widget.addText(displayText.title)
     widget.addSpacer()
+    let header = widget.addText(displayText.title)
+    widget.addSpacer(8)
     let multiLineText = displayText.body.split("\n")
     multiLineText.forEach(e => widget.addText(e))
+    widget.refreshAfterDate = new Date(Date.now() * 30 * 1000)
     Script.setWidget(widget)
 }
 
