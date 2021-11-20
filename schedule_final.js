@@ -52,7 +52,7 @@ function getTimeUntil(pos, neg) {
     let remaining = new Date(startTime.getTime() + (pos - neg))
     let hrs = remaining.getHours()
     let mins  = remaining.getMinutes()
-    return `${hrs.toString() + ((hrs == 1) ? " hour" : " hours")} ${mins.toString() + ((mins == 1) ? " min" : " mins")}`
+    return `${(hrs > 0 ) ? hrs.toString() + ((hrs == 1) ? " hour " : " hours ") : ""}${mins.toString() + ((mins == 1) ? " min" : " mins")}`
 }
 const clamp = (num, min, max) => Math.min(Math.max(num, min), max);
 
