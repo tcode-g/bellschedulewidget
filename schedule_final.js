@@ -20,7 +20,7 @@ const scheduleTimes = {
 /*
 Wants:
     finds time until next class--
-    add if day is weekday or not
+    add if day is weekday or not --
 
 Display:
     current period --
@@ -49,7 +49,7 @@ function stringToMs(timeString) {
     let regMS = ((parseInt(timeSplit[0])*60) + parseInt(timeSplit[1])) * 60000  // 60k is mins to MS
     return regMS + startTime.getTime()
 }
-function getTimeUntil(pos, neg) {
+function getTimeUntil(pos, neg) { // formats difference
     let remaining = new Date(startTime.getTime() + (pos - neg))
     let hrs = remaining.getHours()
     let mins  = remaining.getMinutes()
