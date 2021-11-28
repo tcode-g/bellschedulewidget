@@ -25,7 +25,7 @@ Wants:
 Display:
     current period --
     time until next class --
-    blurred image of patriot logo
+    blurred image of patriot logo --
 */
 
 const currentTime =  new Date()
@@ -49,7 +49,7 @@ function stringToMs(timeString) {
     let regMS = ((parseInt(timeSplit[0])*60) + parseInt(timeSplit[1])) * 60000  // 60k is mins to MS
     return regMS + startTime.getTime()
 }
-function getTimeUntil(pos, neg) { // formats difference
+function getTimeUntil(pos, neg) {
     let remaining = new Date(startTime.getTime() + (pos - neg))
     let hrs = remaining.getHours()
     let mins  = remaining.getMinutes()
@@ -104,16 +104,19 @@ function calculateClass() {
         displayText.body = `Starts in:\n${getTimeUntil(nextStartMS, MS)}`
     }
 }
-function createWidget() {
+async function createWidget() {
     const widget = new ListWidget()
-    widget.addSpacer()
     let header = widget.addText(displayText.title)
-    widget.addSpacer(8)
+    header.textColor = Color.black()    
+    widget.addSpacer(70)
     let multiLineText = displayText.body.split("\n")
-    multiLineText.forEach(e => widget.addText(e))
+    multiLineText.forEach(e => widget.addText(e).textColor = Color.black())
     widget.refreshAfterDate = new Date(Date.now() * 30 * 1000)
+    
+    const backg = await new Request("https://i.imgur.com/VlVW18w.jpg").loadImage()
+    let image = widget.backgroundImage = backg
     Script.setWidget(widget)
 }
 
 calculateClass()
-createWidget()
+await createWidget()
