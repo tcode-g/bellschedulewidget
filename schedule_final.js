@@ -69,7 +69,7 @@ function calculateClass() {
     for(let s = 0; s < scheduleHours.length; s++) {
         let start = scheduleHours[s][0]
         let startMS = stringToMs(start)
-        console.log(start, startMS)
+//         console.log(start, startMS)
         if (MS < startMS) {
             nextClass = s;
             break;
@@ -79,7 +79,7 @@ function calculateClass() {
     let nextStartMS = stringToMs(classStart)
     let nextEndMS = stringToMs(classEnd)
     
-    console.log(nextStartMS, nextEndMS);
+//     console.log(nextStartMS, nextEndMS);
     if (MS > nextEndMS) { // if class not found, defaulted; already the end of the day
         displayText.title = "Finished"
         displayText.body = "No more class!"
