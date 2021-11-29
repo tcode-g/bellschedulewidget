@@ -19,7 +19,7 @@ const scheduleTimes = {
 
 /*
 Wants:
-    finds time until next class--
+    finds time until next class --
     add if day is weekday or not --
 
 Display:
@@ -97,7 +97,7 @@ function calculateClass() {
     let startMS = stringToMs(cClassStart)
     let endMS = stringToMs(cClassEnd)
     if (MS > startMS && MS < endMS) { // in a class
-        displayText.title = cPeriodName || "Period " + currentClass.toString() 
+        displayText.title = cPeriodName || "Period " + (currentClass+1).toString() 
         displayText.body = `Ends in:\n${getTimeUntil(endMS, MS)}`
     } else if (MS > endMS) { // between switching classes
         displayText.title = `Until ${nPeriodName || "Period " + nextClass.toString()}`
