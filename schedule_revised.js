@@ -72,23 +72,68 @@ function calculateClasses() {
         return
     }
     
-    // REDO THIS SO ITS ALL ACCOUNTED FOR IN ONE CHECK USING THE METHOD IN "schedule_final.js"
-    let firstClass = scheduleHours[0]
-    let lastClass = scheduleHours[scheduleHours.length-1]
-    // end of day check
-    if (MILLI > convertTimeToMilli(lastClass[1])) {
+
+    // get the nextClass and currentClass
+    let nextClass = scheduleHours.length-1;
+    for(let i = 0; i < scheduleHours.length; i++) {
+        let classStart = convertTimeToMilli(scheduleHours[i][0])
+        if (MILLI < classStart) {
+            nextClass = i
+            break
+        }
+    }
+
+    let [classStart, classEnd, Period] = scheduleHours[nextClass]
+    if (MILLI > convertTimeToMilli(classEnd)) {
         displayText.title = "Finished"
         displayText.body = "No more class!"
         return
     }
-    // beginning of day check
-    if (MILLI < convertTimeToMilli(firstClass[0])) {
+    
+    let nextClassMilli = convertTimeToMilli(classStart)
+    let currentClass = (MILLI > nextClassMilli) ? nextClass : nextClass-1;
+    if (currentClass < 0) {
         displayText.title = "Before School"
-        displayText.body = getTimeUntil(convertTimeToMilli(firstClass[0]), MILLI)
+        displayText.body = getTimeUntil(nextClassMilli, MILLI)
         return
     }
 
+    [classStart, classEnd, Period] = scheduleHours[currentClass]
+    startClass = convertTimeToMilli(classStart)
+    endClass = convertTimeToMilli(classEnd)
 
+    if (MILLI > startClass && MILLI < endClass) { 
+        // in class
+        displayText.title = Period || "Period " + (currentClass+1).toString() 
+        displayText.body = `Ends in:\n${getTimeUntil(endClass, MILLI)}`
+
+    } else if (MILLI > endClass) { 
+        // switching periods
+        displayText.title = `Until ${Period || "Period " + nextClass.toString()}`
+        displayText.body = `Starts in:\n${getTimeUntil(nextClassMilli, MILLI)}`
+    }
+}
+async function createWidget() {
+    const widget = new ListWidget()
+    let header = widget.addText(displayText.title)
+    header.textColor = Color.black()
+    widget.addSpacer(70)
+    let multiLineText = displayText.body.split("\n")
+    multiLineText.forEach(e => widget.addText(e).textColor = Color.black())
+    widget.refreshAfterDate = new Date(Date.now() * 120 * 1000)
+
+    let backg = null
+
+    try {
+        backg = await new Request("https://i.imgur.com/VlVW18w.jpg").loadImage()
+        widget.backgroundImage = backg
+    } catch (e) {
+        backg = new Color("FF")
+        widget.backgroundColor = backg
+    }
+    Script.setWidget(widget)
 }
 
+calculateClasses()
+await createWidget()
 
