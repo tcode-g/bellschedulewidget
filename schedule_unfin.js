@@ -41,7 +41,7 @@ const startTime = new Date()
 startTime.setHours(0,0,0,0)
 
 var scheduleHours = (Day == 3) ? scheduleTimes.Wednesday : scheduleTimes.Regular; // wednesday check
-if (
+//if (
 const schoolDay = (Day > 0 && Day < 6)
 
 var displayText = {

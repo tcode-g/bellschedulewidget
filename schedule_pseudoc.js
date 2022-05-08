@@ -16,6 +16,8 @@ Timer.schedule(10 * 1000, false, () => {
  * 
  * creat function to get the shedule for this day
  * 
+ * function to convert a class time to milliseconds in the current day
+ * function to get the time until the other time given
  * 
  *	create function getCurrentClass
  		check if current time is less than first period time, 
@@ -51,27 +53,97 @@ const specialDays = {
   
 }
 
-const currentDate = new Date()
+const currentTime = new Date()
+const Now = Now
+const Today = currentTime.getDay()
+const isSchoolDay = (DAY>0 && DAY<6)
+var Display = {
+  "title": "No School Today!",
+  "body": ""
+}
 
+const dayStart = new Date()
+dayStart.setHours(0,0,0,0)
+
+
+function convertTime(timeString) {
+  let timeSplit = timeString.split(":")
+  let converted = ((parseInt(timeSplit[0])*60) + parseInt(timeSplit[1])) * 60000  // 60k is mins to MS
+  return Now + converted
+}
+function formattedTimeUntil(last, next) {
+  let remainingDate = new Date(dayStart.getTime() + (last - next))
+  let hours = remainingDate.getHours()
+  let mins = remainingDate.getMinutes()
+  return `${(hours > 0) ? hours.toString() + ((hours == 1) ? " hour " : " hours ") : ""}${mins.toString() + ((mins == 1) ? " min" : " mins")}`
+}
 
 function getTodaysSchedule() {
   var todaysSchedule = null
   for (let day in specialDays) {
-    let formattedDate = (currentDate.getMonth()+1).toString() + "/" + currentDate.getDate().toString()
+    let formattedDate = (currentTime.getMonth()+1).toString() + "/" + currentTime.getDate().toString()
     if (formattedDate == day) {
       todaysSchedule = scheduleTimes[specialDays[day]]
       break
     }
   }
   if (!todaysSchedule) {
-    todaysSchedule = scheduleTimes[(currentDate.getDay()) == 3 ? "Wednesday" : "Regular"]
+    todaysSchedule = scheduleTimes[(currentTime.getDay()) == 3 ? "Wednesday" : "Regular"]
   }
 }
-function getCurrentClass() {
-  if (!todaysSchedule) return;
+function calculateDisplay() {
+  if (!todaysSchedule || !isSchoolDay) return;
   
+  let firstClass = todaysSchedule[0][0]
+  let lastClass = todaysSchedule[todaysSchedule.length-1][1]
+  if (Now < convertTime(firstClass)) {
+    // before school
+    Display.title = "Before School"
+    Display.body = formattedTimeUntil(convertTime(firstClass), Now)
+  } else if(Now > convertTime(lastClass)) {
+    // after school
+    Display.title = "Finished"
+    Display.body = "No more class!"
+  } else {
+    for (let c = 0; c < scheduleHours.length-1; c++) {
+      let [classStart, classEnd, className] = scheduleHours[c]
+      let periodName = className || "Period" + (c + 1).toString()
+      if (convertTime(classStart) > Now) {
+        // changing classes to this one
+        // TODO: THIS PERIOD ADDITION WONT WORK AFTER 2ND PERIOD
+        // let periodName = className || "Period" + (c + 1).toString()
+        Display.title = "Until " + periodName
+        Display.body = "Starts in:\n" + formattedTimeUntil(Now, convertTime(classStart))
+        break
+      } else if (convertTime(classEnd) > Now) {
+        // in this period
+        Display.title = periodName
+        Display.body = "Ends in:\n" + getTimeUntil(convertTime(classEnd), Now)
+      }
+    }
+  }
+}
+async function createWidget() {
+  const widget = new ListWidget()
+  let header = widget.addText(Display.title)
+  header.textColor = Color.black()
+  widget.addSpacer(70)
+  let displaySplit = Display.body.split("\n")
+  displaySplit.forEach(e => widget.addText(e).textColor = Color.black())
+  widget.refreshAfterDate = new Date(Date.now() * 60 * 1000)
+  try {
+    backg = await new Request("https://i.imgur.com/VlVW18w.jpg").loadImage()
+    widget.backgroundImage = backg
+  } catch (e) {
+    backg = Color.black()
+    widget.backgroundColor = backg
+  }
+  Script.setWidget(widget)
 }
 
+getTodaysSchedule()
+calculateDisplay()
+await createWidget()
 
 
 
