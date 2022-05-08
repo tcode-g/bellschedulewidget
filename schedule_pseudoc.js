@@ -52,6 +52,7 @@ var Display = {
   "title": "No School Today!",
   "body": ""
 }
+var todaysSchedule
 
 const dayStart = new Date()
 dayStart.setHours(0,0,0,0)
@@ -70,7 +71,6 @@ function formattedTimeUntil(last, next) {
 }
 
 function getTodaysSchedule() {
-  var todaysSchedule = null
   for (let day in specialDays) {
     let formattedDate = (currentTime.getMonth()+1).toString() + "/" + currentTime.getDate().toString()
     if (formattedDate == day) {
