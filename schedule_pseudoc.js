@@ -1,6 +1,3 @@
-
-
-
 /* pseudocode for code renovation
  * 
  * establish schedule hours for the day
