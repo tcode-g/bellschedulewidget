@@ -56,7 +56,9 @@ const specialDays = {
 const currentTime = new Date()
 const Now = Now
 const Today = currentTime.getDay()
-const isSchoolDay = (DAY>0 && DAY<6)
+const isSchoolDay = (Today>0 && Today<6)
+const isWednesday = (Day == 3)
+var isSpecialDay = false
 var Display = {
   "title": "No School Today!",
   "body": ""
@@ -84,6 +86,7 @@ function getTodaysSchedule() {
     let formattedDate = (currentTime.getMonth()+1).toString() + "/" + currentTime.getDate().toString()
     if (formattedDate == day) {
       todaysSchedule = scheduleTimes[specialDays[day]]
+      isSpecialDay = true
       break
     }
   }
@@ -107,7 +110,11 @@ function calculateDisplay() {
   } else {
     for (let c = 0; c < scheduleHours.length-1; c++) {
       let [classStart, classEnd, className] = scheduleHours[c]
-      let periodName = className || "Period" + (c + 1).toString()
+      let periodFix = 0
+      if (!isWednesday && !isSpecialDay && c > 3) {
+        periodFix = -1
+      }
+      let periodName = className || "Period" + (c + 1 + periodFix).toString()
       if (convertTime(classStart) > Now) {
         // changing classes to this one
         // TODO: THIS PERIOD ADDITION WONT WORK AFTER 2ND PERIOD
