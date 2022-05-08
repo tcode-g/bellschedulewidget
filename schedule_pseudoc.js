@@ -43,10 +43,10 @@ const specialDays = {
 }
 
 const currentTime = new Date()
-const Now = Now
+const Now = currentTime.getTime()
 const Today = currentTime.getDay()
 const isSchoolDay = (Today>0 && Today<6)
-const isWednesday = (Day == 3)
+const isWednesday = (Today == 3)
 var isSpecialDay = false
 var Display = {
   "title": "No School Today!",
@@ -80,7 +80,7 @@ function getTodaysSchedule() {
     }
   }
   if (!todaysSchedule) {
-    todaysSchedule = scheduleTimes[(currentTime.getDay()) == 3 ? "Wednesday" : "Regular"]
+    todaysSchedule = scheduleTimes[Today == 3 ? "Wednesday" : "Regular"]
   }
 }
 function calculateDisplay() {
@@ -97,8 +97,8 @@ function calculateDisplay() {
     Display.title = "Finished"
     Display.body = "No more class!"
   } else {
-    for (let c = 0; c < scheduleHours.length-1; c++) {
-      let [classStart, classEnd, className] = scheduleHours[c]
+    for (let c = 0; c < todaysSchedule.length-1; c++) {
+      let [classStart, classEnd, className] = todaysSchedule[c]
       let periodFix = 0
       if (!isWednesday && !isSpecialDay && c > 3) {
         periodFix = -1
@@ -112,7 +112,7 @@ function calculateDisplay() {
       } else if (convertTime(classEnd) > Now) {
         // in this period
         Display.title = periodName
-        Display.body = "Ends in:\n" + getTimeUntil(convertTime(classEnd), Now)
+        Display.body = "Ends in:\n" + formattedTimeUntil(convertTime(classEnd), Now)
       }
     }
   }
@@ -126,10 +126,10 @@ async function createWidget() {
   displaySplit.forEach(e => widget.addText(e).textColor = Color.black())
   widget.refreshAfterDate = new Date(Date.now() * 60 * 1000)
   try {
-    backg = await new Request("https://i.imgur.com/VlVW18w.jpg").loadImage()
+    let backg = await new Request("https://i.imgur.com/VlVW18w.jpg").loadImage()
     widget.backgroundImage = backg
   } catch (e) {
-    backg = Color.black()
+    let backg = Color.black()
     widget.backgroundColor = backg
   }
   Script.setWidget(widget)
