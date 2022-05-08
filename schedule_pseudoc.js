@@ -144,14 +144,3 @@ async function createWidget() {
 getTodaysSchedule()
 calculateDisplay()
 await createWidget()
-
-
-
-
-
-
-
-
-
-
-
