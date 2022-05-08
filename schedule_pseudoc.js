@@ -106,8 +106,6 @@ function calculateDisplay() {
       let periodName = className || "Period" + (c + 1 + periodFix).toString()
       if (convertTime(classStart) > Now) {
         // changing classes to this one
-        // TODO: THIS PERIOD ADDITION WONT WORK AFTER 2ND PERIOD
-        // let periodName = className || "Period" + (c + 1).toString()
         Display.title = "Until " + periodName
         Display.body = "Starts in:\n" + formattedTimeUntil(Now, convertTime(classStart))
         break
