@@ -74,7 +74,7 @@ function getTodaysSchedule() {
   for (let day in specialDays) {
     let formattedDate = (currentTime.getMonth()+1).toString() + "/" + currentTime.getDate().toString()
     if (formattedDate == day) {
-      todaysSchedule = scheduleTimes[specialDays[day]]
+      todaysSchedule = scheduleTimes[specialDays[day]] || scheduleTimes.Regular
       isSpecialDay = true
       break
     }
